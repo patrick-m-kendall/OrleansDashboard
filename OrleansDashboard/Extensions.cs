@@ -1,9 +1,9 @@
-﻿using Orleans;
-using Orleans.Runtime;
-using System;
+﻿using System;
 using System.Globalization;
-using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Http;
+using Orleans;
+using Orleans.Runtime;
 
 namespace OrleansDashboard
 {
@@ -24,7 +24,7 @@ namespace OrleansDashboard
             {
                 var guidKey = grainRef.GetPrimaryKey(out var guidExt).ToString();
 
-                return guidExt != null ? $"{guidKey} + {guidExt}" : guidKey.ToString();
+                return guidExt != null ? $"{guidKey} + {guidExt}" : guidKey;
             }
 
             return stringKey;
@@ -32,7 +32,7 @@ namespace OrleansDashboard
 
         internal static string ToValue(this PathString path)
         {
-            return path.ToString().Substring(1);
+            return WebUtility.UrlDecode(path.ToString().Substring(1));
         }
 
         internal static string ToPeriodString(this DateTime value)
